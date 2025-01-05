@@ -1,0 +1,56 @@
+{% extends "_base.html" %}
+
+{% block title %}Editar - Encuestas{% endblock %}
+
+{% block content %}
+<div class="ui center aligned basic very padded segment" style="background-color: #f7f9fc; padding: 50px 20px; border-radius: 15px; box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.1);">
+    <h1 class="ui header dividing" style="font-size: 2.5em; font-family: 'Merriweather', serif; color: #2C3E50; font-weight: 700;">
+        Añadir preguntas a {{ encuesta.titulo }}
+    </h1>
+
+    <div class="ui container left aligned">
+        {% for pregunta in preguntas %}
+        <div class="ui basic padded segment" style="background-color: #ffffff; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+            <h4 class="ui header" style="font-size: 1.6em; color: #34495E; font-weight: 600;">
+                Pregunta {{ forloop.counter }} / {{ preguntas|length }}: {{ pregunta.enunciado }}
+            </h4>
+            <ul style="font-size: 1.2em; line-height: 1.6;">
+                {% for opcion in pregunta.opcion_set.all %}
+                <li style="margin-bottom: 10px; transition: all 0.3s ease; cursor: pointer;" 
+                    onmouseover="this.style.backgroundColor='#ecf0f1';"
+                    onmouseout="this.style.backgroundColor='transparent';">
+                    <span style="font-weight: bold;">{{ forloop.counter }})</span> {{ opcion.texto }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+        
+        <!-- Botón para añadir nueva pregunta -->
+        <a href="{% url 'encuesta-pregunta-crear' encuesta.pk %}">
+            <div class="ui primary large button" style="margin-top: 20px; background-color: #3498db; color: white; font-size: 1.2em; border-radius: 30px;">
+                Añadir una pregunta
+            </div>
+        </a>
+
+        {% if preguntas|length > 0 %}
+        <div class="ui divider" style="margin-top: 30px;"></div>
+
+        <!-- Formulario para activar encuesta -->
+        <form style="display: inline-block;" method="post">
+            {% csrf_token %}
+            <button type="submit" class="ui primary button" style="background-color: #27ae60; color: white; font-size: 1.1em; padding: 15px 30px; border-radius: 30px; transition: all 0.3s ease;">
+                Activar encuesta
+            </button>
+        </form>
+
+        <!-- Botón para volver -->
+        <a href="{% url 'encuesta-lista' %}">
+            <div class="ui secondary button" style="margin-left: 20px; background-color: #e74c3c; color: white; font-size: 1.1em; padding: 15px 30px; border-radius: 30px; transition: all 0.3s ease;">
+                Volver
+            </div>
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

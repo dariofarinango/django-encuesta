@@ -1,0 +1,83 @@
+<style>
+    .thank-you-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .thank-you-container h1 {
+        font-size: 2.8em;
+        font-weight: 700;
+        color: #2C3E50;
+        margin-bottom: 15px;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .thank-you-container .sub.header {
+        font-size: 1.5em;
+        color: #7F8C8D;
+        margin-bottom: 30px;
+    }
+
+    .ui.button.primary {
+        background-color: #3498db;
+        color: white;
+        font-size: 1.2em;
+        padding: 12px 20px;
+        border-radius: 30px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .ui.button.primary:hover {
+        background-color: #2980b9;
+        transform: scale(1.05);
+    }
+
+    /* Animación fadeIn */
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Fondo atractivo */
+    body {
+        background: linear-gradient(to right, #8e44ad, #3498db); /* Gradiente bonito */
+        font-family: 'Arial', sans-serif;
+        color: white;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+    }
+
+    .thank-you-container {
+        background: rgba(255, 255, 255, 0.8); /* Fondo blanco translúcido */
+        backdrop-filter: blur(10px); /* Efecto de difuminado en el fondo */
+    }
+</style>
+
+<div class="thank-you-container">
+    <h1 class="ui header">¡Gracias por completar la encuesta {{ encuesta.title }}! Todo listo.</h1>
+    <div class="sub header">Ahora puedes volver a navegar por Reddit o continuar explorando más encuestas.</div>
+
+    <!-- Botón de regreso o acción -->
+    <a href="https://www.reddit.com/" target="_blank">
+        <button class="ui primary button">Ir a Reddit</button>
+    </a>
+</div>

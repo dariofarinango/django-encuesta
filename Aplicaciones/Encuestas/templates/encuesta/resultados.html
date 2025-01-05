@@ -1,0 +1,113 @@
+{% extends "_base.html" %}
+
+{% block title %}Resultados de Encuestas{% endblock %}
+
+{% block content %}
+<div class="chart-container">
+    <h1 class="ui header">Resultados de Encuestas</h1>
+
+    {% if resultados %}
+        {% for resultado in resultados %}
+            <div class="ui segment">
+                <h2 class="ui header">{{ resultado.titulo }}</h2>
+                <div class="ui divider"></div>
+
+                {% for pregunta in resultado.resultados %}
+                    <div class="ui segment">
+                        <!-- Modificar el estilo del encabezado de la pregunta -->
+                        <h3 class="ui header" style="color: {{ random_color }};">{{ pregunta.pregunta }}</h3>
+
+                        <!-- Aquí se crea el gráfico para cada pregunta -->
+                        <canvas id="chart_{{ pregunta.pregunta|slugify }}" class="result-chart"></canvas>
+
+                        <ul>
+                            {% for opcion in pregunta.opciones %}
+                                <li>
+                                    <strong>{{ opcion.opcion }}:</strong>
+                                    {{ opcion.conteo }} votos ({{ opcion.porcentaje }}%)
+                                    <div style="background-color: #e0e0e0; border-radius: 5px; width: 100%; height: 20px; margin-top: 5px;">
+                                        <div style="background-color: #4CAF50; width: {{ opcion.porcentaje }}%; height: 100%; border-radius: 5px;"></div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="ui message">
+            <div class="header">No hay encuestas activas</div>
+            <p>Por favor, completa y activa encuestas para ver los resultados aquí.</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% for resultado in resultados %}
+            {% for pregunta in resultado.resultados %}
+                var ctx = document.getElementById('chart_{{ pregunta.pregunta|slugify }}').getContext('2d');
+                
+                // Datos del gráfico
+                var opciones = {
+                    labels: [
+                        {% for opcion in pregunta.opciones %}
+                            '{{ opcion.opcion }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: 'Votos',
+                        data: [
+                            {% for opcion in pregunta.opciones %}
+                                {{ opcion.conteo }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            // Puedes agregar más colores aquí si hay más opciones
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(54, 162, 235, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+
+                // Crear gráfico de pastel
+                var myChart = new Chart(ctx, {
+                    type: 'pie',  // Tipo de gráfico
+                    data: opciones,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top', // Posición de la leyenda
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        var label = tooltipItem.label;
+                                        var porcentaje = tooltipItem.raw;
+                                        var total = tooltipItem.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                        var porcentajeVoto = ((porcentaje / total) * 100).toFixed(2);
+                                        return label + ': ' + porcentaje + ' votos (' + porcentajeVoto + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            {% endfor %}
+        {% endfor %}
+    });
+</script>
+
+{% endblock %}

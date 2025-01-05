@@ -1,0 +1,110 @@
+{% extends "_base.html" %}
+
+{% block title %}Pregunta - Encuestas{% endblock %}
+
+{% block content %}
+<div class="ui center aligned basic very padded segment" style="background-color: #F9F9F9; padding: 40px 20px; border-radius: 10px; box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);">
+    <h1 class="ui header" style="font-size: 2.5em; font-weight: bold; color: #00796b;">Crear una nueva pregunta</h1>
+
+    <div class="ui container left aligned" style="max-width: 700px; margin-top: 20px;">
+        <form class="ui form {% if form.errors %}error{% endif %}" method="post" novalidate>
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="field {% if field.errors %}error{% endif %}" style="margin-bottom: 20px;">
+                <label style="font-size: 1.2em; color: #00796b;">{{ field.label_tag }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+
+            <!-- Botón de Crear Pregunta -->
+            <button type="submit" class="ui primary large button" style="background-color: #00796b; color: white; padding: 12px 30px; font-size: 1.2em; border-radius: 25px; transition: background-color 0.3s ease, transform 0.3s ease;">
+                Crear pregunta
+            </button>
+
+            <!-- Botón de Cancelar -->
+            <a href="{% url 'encuesta-editar' encuesta.pk %}">
+                <div class="ui secondary button" style="font-size: 1.2em; padding: 12px 30px; margin-top: 20px; color: #00796b; border-radius: 25px; border: 2px solid #00796b; transition: background-color 0.3s ease;">
+                    Cancelar
+                </div>
+            </a>
+
+            <!-- Mensajes de Error -->
+            <div class="ui message error" style="margin-top: 20px;">
+                <div class="header">Tuvimos algunos problemas</div>
+                <ul class="list" style="font-size: 1.1em; color: #d32f2f;">
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <li>{{ field.label_tag }} {{ error }}</li>
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+<style>
+    /* Estilos para el fondo y el contenedor del formulario */
+    body {
+        background-color: #f1f1f1; /* Fondo suave */
+        font-family: 'Arial', sans-serif;
+    }
+
+    .ui.centered.very.padded.segment {
+        background-color: #ffffff; /* Fondo blanco para el contenedor */
+        border-radius: 10px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Mejoras para los campos del formulario */
+    .ui.form .field {
+        margin-bottom: 20px;
+    }
+
+    .ui.form input,
+    .ui.form textarea,
+    .ui.form select {
+        padding: 12px;
+        font-size: 1.1em;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    /* Botones mejorados */
+    .ui.primary.button {
+        background-color: #00796b;
+        color: white;
+    }
+
+    .ui.primary.button:hover {
+        background-color: #004d40;
+        transform: scale(1.05);
+    }
+
+    .ui.secondary.button {
+        background-color: #ffffff;
+        color: #00796b;
+        border: 2px solid #00796b;
+    }
+
+    .ui.secondary.button:hover {
+        background-color: #00796b;
+        color: white;
+    }
+
+    /* Mensajes de error */
+    .ui.message.error {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 10px;
+    }
+</style>

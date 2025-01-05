@@ -1,0 +1,31 @@
+{% extends "_base.html" %}
+
+{% block title %}Configuración de Encuesta{% endblock %}
+
+{% block content %}
+<div class="ui container">
+    <h2 class="ui header">Configuración de la Encuesta</h2>
+
+    <form method="post" class="ui form">
+        {% csrf_token %}
+        
+        <div class="field">
+            <label for="titulo">Título de la Encuesta</label>
+            {{ form.titulo }}
+        </div>
+
+        <div class="field">
+            <label for="esta_activa">¿Está activa?</label>
+            {{ form.esta_activa }}
+        </div>
+
+        <button type="submit" class="ui primary button">Guardar configuraciones</button>
+    </form>
+    
+    <div class="ui segment">
+        <h4>Configuración actual:</h4>
+        <p><strong>Título:</strong> {{ encuesta.titulo }}</p>
+        <p><strong>Estado:</strong> {% if encuesta.esta_activa %} Activa {% else %} Inactiva {% endif %}</p>
+    </div>
+</div>
+{% endblock %}

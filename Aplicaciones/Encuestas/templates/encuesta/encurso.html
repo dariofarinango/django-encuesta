@@ -1,0 +1,49 @@
+{% extends "_base.html" %}
+
+{% block title %}Encuestas en Curso{% endblock %}
+
+{% block content %}
+<div class="ui container" style="padding-top: 50px;">
+    <div class="ui segment" style="border-radius: 15px; box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+        <h2 class="ui header" style="font-size: 2.5em; font-family: 'Merriweather', serif; color: #2C3E50; font-weight: 700;">
+            Encuestas en Curso
+        </h2>
+        <table class="ui celled table" style="width: 100%; border-radius: 10px; overflow: hidden;">
+            <thead>
+                <tr style="background-color: #3498db; color: white;">
+                    <th>Título de la Encuesta</th>
+                    <th>Fecha de Creación</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for encuesta in encuestas %}
+                <tr style="background-color: #f7f9fc; transition: background-color 0.3s ease;">
+                    <td>{{ encuesta.titulo }}</td>
+                    <td>{{ encuesta.creada_en|date:"d M Y, H:i" }}</td>
+                    <td>
+                        <a href="{% url 'encuesta-detalle' encuesta.pk %}">
+                            <div class="ui primary button" style="background-color: #3498db; color: white; border-radius: 30px; font-size: 1.1em; padding: 10px 20px; transition: all 0.3s ease;">
+                                Ver
+                            </div>
+                        </a>
+                        <form method="post" action="{% url 'encuesta-iniciar' encuesta.pk %}" style="display: inline-block;">
+                            {% csrf_token %}
+                            <button type="submit" class="ui secondary button" style="background-color: #27ae60; color: white; border-radius: 30px; font-size: 1.1em; padding: 10px 20px; transition: all 0.3s ease;">
+                                Iniciar Encuesta
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="center aligned" style="font-size: 1.5em; color: #e74c3c; font-weight: 600;">
+                        No hay encuestas en curso.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

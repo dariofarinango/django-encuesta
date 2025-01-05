@@ -1,0 +1,53 @@
+{% block content %}
+<div class="ui centered very padded segment" style="background: linear-gradient(to right, #00bcd4, #00796b); border-radius: 15px; box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15);">
+    <h1 class="ui header" style="color: white; font-size: 3.5em; font-weight: 700; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">
+        {{ encuesta.titulo }}
+    </h1>
+    <div class="sub header" style="color: white; font-size: 1.5em; margin-bottom: 30px; font-style: italic;">
+        {{ encuesta.descripcion|default:"Estás a punto de iniciar esta encuesta." }}
+    </div>
+
+    <form method="post" action="{% url 'encuesta-iniciar' encuesta.pk %}" style="display: inline-block;">
+        {% csrf_token %}
+        <button type="submit" class="ui primary large button" style="background-color: #00796b; color: white; padding: 15px 40px; font-size: 1.3em; border-radius: 40px; box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15); transition: all 0.3s ease; text-transform: uppercase;">
+            Iniciar Encuesta
+        </button>
+    </form>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(to top, #b2ebf2, #80deea);
+        font-family: 'Arial', sans-serif;
+    }
+
+    .ui.centered.very.padded.segment {
+        margin-top: 50px;
+        max-width: 700px;
+        padding: 40px;
+    }
+
+    .ui.primary.button:hover {
+        background-color: #004d40; /* Color oscuro al pasar el mouse */
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25);
+        transform: scale(1.05); /* Efecto de escala al pasar el mouse */
+    }
+
+    .ui.header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Ajustes para mejorar la tipografía */
+    .sub.header {
+        text-align: center;
+        font-size: 1.6em;
+        font-weight: 300;
+    }
+
+    /* Efecto de transición suave en el fondo */
+    .ui.primary.large.button {
+        transition: all 0.3s ease-in-out;
+    }
+</style>
+{% endblock %}

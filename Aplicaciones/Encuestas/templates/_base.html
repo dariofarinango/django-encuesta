@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Encuestas{% endblock %}</title>
+
+    <!-- Cargando Semantic UI para estilos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+
+    <!-- Cargando Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Estilos personalizados -->
+    <style>
+        /* Fondo de la página */
+        body {
+            background-color: #f9f9fb; /* Fondo claro */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Encabezado estilo Editorial */
+        .header {
+            background: linear-gradient(to right, #4A90E2, #50E3C2); /* Fondo degradado elegante */
+            color: white; /* Color de texto blanco */
+            font-family: 'Georgia', serif; /* Fuente serif elegante */
+            font-size: 3em; /* Tamaño de fuente grande */
+            text-align: center;
+            padding: 50px 20px; /* Espaciado amplio */
+            text-transform: uppercase; /* Para dar un toque editorial */
+            letter-spacing: 2px; /* Espaciado entre letras */
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+            margin-bottom: 0; /* Eliminar margen inferior */
+        }
+
+        /* Barra de navegación */
+        .ui.menu {
+            background-color: #333; /* Fondo oscuro */
+            border-radius: 0;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 0; /* Eliminar margen superior */
+        }
+
+        .ui.menu .item {
+            color: white;
+            font-size: 16px;
+            padding: 15px 20px;
+        }
+
+        .ui.menu .item:hover {
+            background-color: #444444; /* Tono gris oscuro al pasar el cursor */
+            color: #f4f4f9;
+        }
+
+        .ui.menu .active.item {
+            background-color: #333333; /* Tono gris oscuro para el ítem activo */
+        }
+
+        /* Estilo para el contenedor principal */
+        .ui.container {
+            margin-top: 30px;
+        }
+
+        .ui.segment {
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Estilo para los títulos de las encuestas */
+        .ui.header {
+            font-size: 2em;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .sub.header {
+            color: #555;
+            font-size: 1.2em;
+        }
+
+        /* Estilo del pie de página */
+        .footer {
+            background-color: #1f1f1f; /* Fondo negro */
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: white;
+        }
+
+        .footer p {
+            font-size: 14px;
+            color: #f4f4f9;
+        }
+
+        /* Mejora de los botones */
+        .ui.primary.button {
+            background-color: #f76c6c; /* Color llamativo (rojo suave) */
+            color: white;
+            font-size: 1.1em;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            border: none;
+        }
+
+        .ui.primary.button:hover {
+            background-color: #e05c5c; /* Color más oscuro al pasar el cursor */
+            transform: scale(1.05); /* Escalado suave */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Sombra más intensa al pasar el cursor */
+        }
+
+        .ui.primary.button:active {
+            background-color: #d54c4c; /* Color más oscuro cuando se hace clic */
+            transform: scale(1.03); /* Ligero escalado hacia abajo */
+        }
+
+        /* Estilo para el contenedor del gráfico */
+        .chart-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animación para el título */
+        .ui.header {
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        /* Animación personalizada */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Encabezado estilo Editorial -->
+    <div class="header">
+        <h2>6. App de Encuestas para Investigación Académica</h2>
+    </div>
+
+    <!-- Barra de navegación -->
+    <div class="ui menu">
+        <a href="{% url 'encuesta-lista' %}" class="item">Inicio</a>
+        <a href="{% url 'encuesta-crear' %}" class="item">Crear Encuesta</a>
+        <a href="{% url 'encuesta-en-curso' %}" class="item">Encuestas en curso</a>
+        <a href="{% url 'resultados' %}" class="item">Resultados</a>
+        <a href="{% url 'configuracion' %}" class="item">Configuración</a>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="ui container">
+        {% block content %}
+        <div class="ui centered segment">
+            <h1 class="ui header">Encuesta sobre el Cambio Climático</h1>
+            <p class="sub header">Tu opinión es muy importante para entender el impacto del cambio climático.</p>
+            <form method="post" action="{% url 'encuesta-iniciar' encuesta.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="ui primary large button">Iniciar Encuesta</button>
+            </form>
+        </div>
+        {% endblock %}
+    </div>
+
+    <!-- Pie de página -->
+    <div class="footer">
+        <p>&copy; 2025 6. App de Encuestas. Todos los derechos reservados.</p>
+    </div>
+
+    <!-- Cargando los scripts de Semantic UI -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</body>
+
+</html>

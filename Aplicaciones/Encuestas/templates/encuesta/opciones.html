@@ -1,0 +1,132 @@
+{% extends "_base.html" %}
+
+{% block title %}Opciones - Encuestas{% endblock %}
+
+{% block content %}
+<div class="ui center aligned basic very padded segment" style="background-color: #E0F7FA; border-radius: 10px; box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);">
+    <h1 class="ui header dividing" style="font-size: 2.5em; font-weight: bold; color: #00796b;">Agregar opciones a la pregunta</h1>
+    
+    <div class="ui container left aligned">
+        <h4 class="ui header" style="font-size: 1.8em; color: #00796b; font-weight: 600;">
+            Pregunta: {{ pregunta.prompt }}
+        </h4>
+        
+        <!-- Lista de Opciones -->
+        <ul class="ui list" style="margin-bottom: 20px;">
+            {% for opcion in opciones %}
+            <li class="item" style="font-size: 1.2em; color: #333; padding: 10px 0;">
+                {{ forloop.counter }}) {{ opcion.texto }}
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Formulario de Adición de Opciones -->
+        <form class="ui form {% if form.errors %}error{% endif %}" method="post" novalidate>
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="field {% if field.errors %}error{% endif %}" style="margin-bottom: 20px;">
+                <label>{{ field.label_tag }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+            
+            <!-- Botón de Agregar Opción -->
+            <button type="submit" class="ui primary large button" style="background-color: #00796b; color: white; padding: 12px 30px; font-size: 1.1em; border-radius: 25px; transition: all 0.3s ease;">
+                Agregar nueva opción
+            </button>
+
+            <!-- Mensajes de Error -->
+            <div class="ui message error" style="margin-top: 20px;">
+                <div class="header">Tuvimos algunos problemas</div>
+                <ul class="list" style="font-size: 1.1em; color: #d32f2f;">
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <li>{{ field.label_tag }} {{ error }}</li>
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </form>
+
+        <!-- Botón para Terminar -->
+        {% if opciones|length > 0 %}
+        <div class="ui divider"></div>
+        <a href="{% url 'encuesta-editar' encuesta.pk %}">
+            <div class="ui secondary button" style="font-size: 1.2em; padding: 12px 30px; color: #00796b; border-radius: 25px; border: 2px solid #00796b;">
+                Hecho agregando opciones
+            </div>
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+<style>
+    /* Estilos generales */
+    body {
+        background-color: #b2ebf2; /* Fondo celeste claro */
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Estilos para el formulario */
+    .ui.form .field {
+        font-size: 1.1em;
+    }
+
+    /* Mejorar la apariencia del botón */
+    .ui.button {
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+
+    .ui.button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Botones específicos */
+    .ui.primary.button {
+        background-color: #00796b;
+        color: white;
+    }
+
+    .ui.primary.button:hover {
+        background-color: #004d40;
+    }
+
+    .ui.secondary.button {
+        background-color: #ffffff;
+        color: #00796b;
+        border: 2px solid #00796b;
+    }
+
+    .ui.secondary.button:hover {
+        background-color: #00796b;
+        color: white;
+    }
+
+    /* Estilos de la lista */
+    .ui.list .item {
+        font-size: 1.2em;
+        color: #333;
+        padding: 10px 0;
+        margin-bottom: 15px;
+    }
+
+    /* Estilos para el mensaje de error */
+    .ui.message.error {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 10px;
+    }
+</style>

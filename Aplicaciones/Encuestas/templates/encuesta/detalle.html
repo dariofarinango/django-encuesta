@@ -1,0 +1,40 @@
+{% extends "_base.html" %}
+
+{% block title %}Ver - Encuestas{% endblock %}
+
+{% block content %}
+<div class="ui center aligned basic very padded segment" style="background-color: #f7f9fc; padding: 50px 20px; border-radius: 15px; box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.1);">
+    <!-- Título principal -->
+    <h1 class="ui header" style="font-size: 3em; font-family: 'Merriweather', serif; color: #2C3E50; font-weight: 700; margin-bottom: 10px;">
+        {{ encuesta.titulo }}
+    </h1>
+    
+    <!-- Información adicional de la encuesta -->
+    <div class="sub header" style="font-size: 1.4em; color: #7F8C8D; font-style: italic; margin-bottom: 10px;">Tienes {{ num_envios }} envíos</div>
+    <div class="sub header" style="font-size: 1.4em; color: #7F8C8D; font-style: italic;">URL de la encuesta: 
+        <a href="{{ public_url }}" style="color: #E74C3C; text-decoration: none; font-weight: bold;" target="_blank">{{ public_url }}</a>
+    </div>
+
+    <!-- Sección de resultados -->
+    <h1 class="ui header dividing" style="font-size: 2.5em; color: #2C3E50; font-weight: 700; margin-top: 40px; padding-bottom: 10px;">Resultados</h1>
+
+    {% for pregunta in preguntas %}
+    <div class="ui basic padded segment" style="background-color: #ffffff; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); margin-top: 20px; transition: all 0.3s ease;">
+        <h4 class="ui header" style="font-size: 1.6em; color: #34495E; font-weight: 600; padding-bottom: 10px;">
+            Pregunta {{ forloop.counter }} / {{ preguntas|length }}: {{ pregunta.enunciado }}
+        </h4>
+
+        <ul style="font-size: 1.2em; line-height: 1.6;">
+            {% for opcion in pregunta.opcion_set.all %}
+            <li style="margin-bottom: 15px; transition: all 0.3s ease; padding-left: 10px; border-left: 3px solid transparent; cursor: pointer;" 
+                onmouseover="this.style.borderLeft='3px solid #3498db'; this.style.paddingLeft='15px';"
+                onmouseout="this.style.borderLeft='3px solid transparent'; this.style.paddingLeft='10px';">
+                <span style="font-weight: bold;">{{ forloop.counter }})</span> {{ opcion.texto }}: 
+                <span style="color: #E74C3C; font-weight: 600;">{{ opcion.percent|floatformat }}%</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
